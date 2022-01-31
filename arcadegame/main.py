@@ -81,6 +81,14 @@ balls.append({
 weapon_to_remove = -1
 ball_to_remove = -1
 
+# Font 정의
+game_font = pygame.font.Font(None, 40)
+total_time = 100
+start_ticks = pygame.time.get_ticks()
+
+# 게임 종료 메시지
+game_result = "Game Over"
+
 # 이벤트 루프
 running = True
 while running :
@@ -222,6 +230,11 @@ while running :
     if weapon_to_remove > -1:
         del weapons[weapon_to_remove]
         weapon_to_remove = -1
+
+    # 모든 공을 없앤 경우 게임 종료 (성공)
+    if len(balls) == 0:
+        game_result = "Misson Complete"
+        running = False
     
     # 화면 그리기
     screen.blit(backgroud, (0, 0))
@@ -238,6 +251,24 @@ while running :
     screen.blit(stage, (0, screen_height - stage_height))
     screen.blit(character, (character_x_pos, character_y_pos))
 
+    # 경과 시간 계산
+    elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000
+    timer = game_font.render("Time : {}".format(int(total_time - elapsed_time)), True, (255, 255, 255))
+    screen.blit(timer, (10, 10))
+
+    # 시간 초과 경우
+    if total_time - elapsed_time <= 0:
+        game_result = "Time Over"
+        running = False
+
     pygame.display.update()
+
+# 게임 오버 메시지
+msg = game_font.render(game_result, True, (255, 255, 0))
+msg_rect = msg.get_rect(center=(int(screen_width / 2), int(screen_height / 2)))
+screen.blit(msg, msg_rect)
+pygame.display.update()
+
+pygame.time.delay(2000)
 
 pygame.quit()
