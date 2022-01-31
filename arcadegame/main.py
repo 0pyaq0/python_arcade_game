@@ -221,6 +221,9 @@ while running :
 
                 break
 
+        else: # 계속 게임 진행
+            continue 
+        break
     
     # 충돌된 공 or 무기 없애기
     if ball_to_remove > -1:
