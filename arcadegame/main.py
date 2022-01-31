@@ -1,3 +1,4 @@
+from cProfile import run
 import pygame
 
 pygame.init #초기화
@@ -38,6 +39,17 @@ enemy_width = enemy_size[0]
 enemy_height = enemy_size[1]
 enemy_x_pos = (screen_width/2) - (enemy_width/2) 
 enemy_y_pos = (screen_height/2) - (enemy_height/2)
+
+
+#폰트 정의
+game_font = pygame.font.Font(None, 40) #폰트 객체 (폰트, 크기)
+
+#총 시간
+total_time = 10
+
+#시작 시간
+start_ticks = pygame.time.get_ticks()
+
 
 #이벤트 루프
 running = True #게임 진행 체크
@@ -101,8 +113,25 @@ while running :
     screen.blit(character, (character_x_pos, character_y_pos))
     screen.blit(enemy, (enemy_x_pos, enemy_y_pos))
 
+    #타이머
+    #경과 시간 계산
+    elasped_time = (pygame.time.get_ticks() - start_ticks) / 1000
+    #경과 시간(ms)을 1000으로 나누어서 초(s)단위로 표시
+
+    #출력할 글자, True, 글자 색상
+    timer = game_font.render(str(int(total_time - elasped_time)), True, (255, 255, 255))
+    
+    screen.blit(timer,(10, 10))
+
+    if total_time - elasped_time <= 0:
+        print("타임아웃")
+        running = False
+
     pygame.display.update() #게임 화면 다시 그리기
 
+
+#잠시 대기
+pygame.time.delay(2000) #2초 대기
 
 #pygame 종료
 pygame.quit()
